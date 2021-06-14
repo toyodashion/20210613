@@ -1,12 +1,87 @@
 <!DOCTYPE html>
 <html lang="ja">
+
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
 </head>
+
+
 <body>
-  
+  <div id="app">
+    <h1>TODOアプリ</h1>
+    <label>タスク名：<input type="text" v-model="task"></label>
+    <label>推定時間（分）<input type="text" v-model="minutes"></label>
+    <button v-on:click="push">追加</button>
+    <table>
+      <tr>
+        <th>タスク名</th>
+        <th>推定時間（分）</th>
+      </tr>
+      <todo-item v-for="todo in todos" v-bind:item="todo"></todo-item>
+    </table>
+  </div>
+  <script>
+
+    Vue.component("todo-item",{
+      props:{
+        item:{
+          type:Array
+        }
+      },
+      template:`
+      <tr>
+        <td>{{item.title}}</td>
+        <td>{{item.time}}分</td>
+      </tr>
+      `
+    })
+
+    const vm = new Vue({
+      el:"#app",
+      data(){
+        return{
+          task:"",
+          minutes:"",
+          todos:[
+            {
+              title:"学習",
+              time:30
+            },
+            {
+              title:"復習",
+              time:20
+            },
+            {
+              title:"予習",
+              time:40
+            }
+          ]
+        }
+      },
+      methods: {
+        push: function () {
+          const pushItem = {
+            title: this.task,
+            time: this.minutes
+          }
+          vm.todos.push(pushItem)
+          this.task = "",
+          this.minutes = ""
+        }
+      }
+    })
+  </script>
+  <style>
+    th,td{
+      padding: 10px 180px 0 0;
+      margin: 0;
+    }
+  </style>
 </body>
+
 </html>
